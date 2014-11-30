@@ -1,0 +1,22 @@
+---
+title: "Building a cross platform solution for Windows Phone and Windows 8."
+subtitle: "Part VI: Behaviors for coping with orientation changes"
+layout: "post"
+permalink: "/2014/01/building-cross-platform-solution-for.html"
+uuid: "6343544265021122664"
+guid: "tag:blogger.com,1999:blog-4315928131887373364.post-6343544265021122664"
+date: "2014-01-25 10:22:00"
+updated: "2014-01-25 10:22:57"
+description: 
+blogger:
+    siteid: "4315928131887373364"
+    postid: "6343544265021122664"
+    comments: "0"
+categories: [Windows Phone, Windows 8]
+author: "Gitte Vermeiren"
+header-img: "img/mobile.jpg"
+---
+
+<div class="css-full-post-content js-full-post-content">
+Previous parts in this series:<br /><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for.html">Part 0: Intro</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_2.html">Part I: Quick sharing of code</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_3.html">Part II: The class library approach</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_8.html">Part III: We need a pattern</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_15.html">Part IV: Mocking out the differences</a><br /><a href="/2013/12/building-cross-platform-solution-for_23.html">Part V: Event to command</a><br />Part VI: Behaviors for coping with orientation changes<br />Part VII: Tombstoning<br /><br />In the last post we looked at an EventToCommand implementation to easily databind our events to commands, even when we don't have a Command property on a control.<br /><br />In this post, I will run you through another trick, to ease the development of your views.<br /><br />One of the behaviors you will probably want in your application is the ability to react to orientation changes. You can easily do this by creating an event handler for the OrientationChanged event in the code behind of your page. You will have to do this in every page you want to be able to react to orientation changes. Resulting in copies of the same piece of code all over the place.<br /><br />But there is actually a more elegant way of dealing with this, and it is based on behaviors. What you can do is write a specific behavior that does nothing more than attach an event handler to the OrientationChanged event of the associated page. Based on the name of the new orientation, you can now load a specific state of you VisualStateManager.<br /><br /><script src="https://gist.github.com/vermegi/8614361.js"></script> <br />Of course, in XAML, you now have to create the necessary VisualStateGroups for the specific orientations.<br /><br /><script src="https://gist.github.com/vermegi/8614370.js"></script> <br />The only thing missing still is a small extra piece of XAML to make use of the OrientationChangedBehavior.<br /><br /><script src="https://gist.github.com/vermegi/8614377.js"></script> <br />That's it, small and simple little trick. In the next part we'll look at the troubles you can have when your application needs to be tombstoned.<br /><br />Other parts in this series:<br /><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for.html">Part 0: Intro</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_2.html">Part I: Quick sharing of code</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_3.html">Part II: The class library approach</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_8.html">Part III: We need a pattern</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_15.html">Part IV: Mocking out the differences</a><br /><a href="http://proq.blogspot.be/2013/12/building-cross-platform-solution-for_23.html">Part V: Event to command</a><br />Part VI: Behaviors for coping with orientation changes<br />Part VII: Tombstoning
+</div>
