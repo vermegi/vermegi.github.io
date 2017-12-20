@@ -3,7 +3,7 @@ layout: post
 title:  "Tomcat Container on Azure Part 2"
 date:   2017-12-20 14:15:05
 categories: azure docker ACI WebApps
-header-img: "assets/logo docker.jpg"
+header-img: "assets/logo docker.png"
 ---
 In a [previous post][previous] I ran a docker container on [Azure Container Instance][aci]. In this post, I will reuse this container and run it on [Web Apps on Containers][webapps].
 
