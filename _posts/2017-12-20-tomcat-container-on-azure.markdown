@@ -93,15 +93,15 @@ docker run -it -p 8080:8080 --name the-app the-app-test
 
 You can now connect to this running container on port 8080. You can connect with the tomcatadmin user that's in the tomcat-users file. This will give you the Tomcat admin page. 
 
-![Tomcat Admin]({{ "/assets/tomcatadmin.jpg" }})
+![Tomcat Admin]({{ "assets/tomcatadmin.jpg" | absolute_url }})
 
 You can click the 'Manager App' button. This will show you the apps running on your Tomcat server.
 
-![Tomcat Apps]({{ "/assets/tomcatapp.jpg" | absolute_url }})
+![Tomcat Apps]({{ "assets/tomcatapp.jpg" | absolute_url }})
 
 You can click the link of the SHawtio app. To get to the index.html, we added this to our link. This now shows the hawt.io start page. 
 
-![Hawtio Start]({{ "/assets/hawtio.jpg" | absolute_url }})
+![Hawtio Start]({{ "assets/hawtio.jpg" | absolute_url }})
 
 Now that we have our container running locally, we can now push it up to Azure. First, we will try and run it as a Azure Container Image. In a next blog post, we will run it in Web apps on containers.
 
@@ -122,10 +122,41 @@ $registry = New-AzureRMContainerRegistry -ResourceGroupName "Tomcat_Poc" -Name $
 $creds = Get-AzureRmContainerRegistryCredential -Registry $registry
 {% endhighlight %}
 
+You can now log in to this registry and get the name/url of the newly created registry. Copy this name, you will need it in the next steps. 
+
+{% highlight powerShell %}
+docker login $registry.LoginServer -u $creds.Username -p $creds.Password
+
+Get-AzureRmContainerRegistry | Select Loginserver
+{% endhighlight %}
+
+We can now tag our docker image and push it to the newly created registry.
+
+{% highlight powerShell %}
+docker tag the-app-test tomcatpocregistry.azurecr.io/the-app-test:v1
+
+docker push tomcatpocregistry.azurecr.io/the-app-test:v1
+{% endhighlight %}
+
+We can now create an Azure Container Instance. Since this needs a PSCredential, we need to convert our registrycredentials first.
+
+{% highlight powerShell %}
+$secpasswd = ConvertTo-SecureString $creds.Password -AsPlainText -Force
+$mycred = New-Object System.Management.Automation.PSCredential ("TomcatPocRegistry", $secpasswd)
 
 
+New-AzureRmContainerGroup -ResourceGroupName Tomcat_Poc -Name theappcontainer -Image tomcatpocregistry.azurecr.io/the-app-test:v1 -OsType Linux -IpAddressType Public -RegistryCredential $mycred -Port 8080
+{% endhighlight %}
 
+This will output info on your newly created Azure Container Instance. After a while it will be in a 'Succeeded' ProvisioningState. You can check its' state with the following command. 
 
+{% highlight powerShell %}
+Get-AzureRmContainerGroup -ResourceGroupName Tomcat_Poc -Name theappcontainer
+{% endhighlight %}
+
+This will also give you the public IP address at which your container is running. Just as we did with localhost, we can browse to this IP-address, add 8080 as port number and watch the apps on the Tomcat instance.
+
+In a next post, I will push this container in Web Apps on containers. 
 
 [tomee]:      https://hub.docker.com/_/tomee/
 [hawtio]:     http://hawt.io/ 
