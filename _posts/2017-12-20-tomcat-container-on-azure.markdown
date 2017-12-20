@@ -93,7 +93,7 @@ docker run -it -p 8080:8080 --name the-app the-app-test
 
 You can now connect to this running container on port 8080. You can connect with the tomcatadmin user that's in the tomcat-users file. This will give you the Tomcat admin page. 
 
-![Tomcat Admin]({{ "/assets/tomcatadmin.jpg" | absolute_url }})
+![Tomcat Admin]({{ "/assets/tomcatadmin.jpg" }})
 
 You can click the 'Manager App' button. This will show you the apps running on your Tomcat server.
 
@@ -103,10 +103,31 @@ You can click the link of the SHawtio app. To get to the index.html, we added th
 
 ![Hawtio Start]({{ "/assets/hawtio.jpg" | absolute_url }})
 
-Now that we have our container running locally, we can now push it up to Azure. First, we will try and run it as a Azure Container Image. 
+Now that we have our container running locally, we can now push it up to Azure. First, we will try and run it as a Azure Container Image. In a next blog post, we will run it in Web apps on containers.
+
+To begin, login to your azure account and create a new resource group.
+
+{% highlight powerShell %}
+Login-AzureRmAccount
+
+New-AzureRmResourceGroup -Name Tomcat_Poc -Location 'West Europe'
+{% endhighlight %}
+
+Next, create an [Azure Container Registry][ACR] and get the credentials.
+
+{% highlight powerShell %}
+$registryName = "TomcatPoCRegistry"
+$registry = New-AzureRMContainerRegistry -ResourceGroupName "Tomcat_Poc" -Name $registryName -EnableAdminUser -Sku Basic
+
+$creds = Get-AzureRmContainerRegistryCredential -Registry $registry
+{% endhighlight %}
+
+
+
 
 
 
 [tomee]:      https://hub.docker.com/_/tomee/
 [hawtio]:     http://hawt.io/ 
 [aci]:        https://azure.microsoft.com/en-us/services/container-instances/ 
+[ACR]:        https://azure.microsoft.com/en-us/services/container-registry/
