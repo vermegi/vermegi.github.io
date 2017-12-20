@@ -3,7 +3,7 @@ layout: post
 title:  "Tomcat Container on Azure"
 date:   2017-12-20 14:15:05
 categories: azure docker ACI WebApps
-header-img: "img/post-bg-06.jpg"
+header-img: "assets/logo docker.jpg"
 ---
 I recently was asked to convert an app running on Weblogic to a container running on Azure. As a base app, we used a war file based on [Hawt.io][hawtio]. 
 
