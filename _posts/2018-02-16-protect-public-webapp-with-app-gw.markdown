@@ -3,7 +3,7 @@ layout: post
 title:  "Protect multi-tenant web app with application gateway and WAF"
 date:   2018-02-16 14:15:05
 categories: azure WebApps WAF
-header-img: "assets/ip-restrictions.png"
+
 ---
 The Azure docs contain a walkthrough of [configuring an Application Gateway in front of a multi-tenant web app][walkthrough]. This is all good and well, but after going through these powershell scripts, a user is still able to directly hit your public website. Meaning, users are not necessarily forced to pass through the application gateway. 
 
