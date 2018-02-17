@@ -11,7 +11,7 @@ To enable this behaviour, you need to combine the above walkthrough with the [IP
 
 If you follow the second [script][script] on the application gateway configuration documentation item, you end up with a resource group which has the following resources:
 
-![resources]({{ "assets/resources.JPG" | absolute_url }})
+![resources]({{ "assets/resources.JPG" | absolute_url }}){: .img-fluid}
 
 I altered this script a bit to take a different region closer to me. Also, I altered the script to use the Standard app service plan SKU, since IP restrictions are not possible in the free or shared SKU's. 
 
