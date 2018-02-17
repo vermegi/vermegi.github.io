@@ -3,7 +3,7 @@ layout: post
 title:  "Tomcat Container on Azure"
 date:   2017-12-20 14:15:05
 categories: azure docker ACI WebApps
-header-img: "assets/logo docker.png"
+background: "/assets/logo docker.png"
 ---
 I recently was asked to convert an app running on Weblogic to a container running on Azure. As a base app, we used a war file based on [Hawt.io][hawtio]. 
 
@@ -93,15 +93,15 @@ docker run -it -p 8080:8080 --name the-app the-app-test
 
 You can now connect to this running container on port 8080. You can connect with the tomcatadmin user that's in the tomcat-users file. This will give you the Tomcat admin page. 
 
-![Tomcat Admin]({{ "assets/tomcatadmin.JPG" | absolute_url }})
+![Tomcat Admin]({{ "assets/tomcatadmin.JPG" | absolute_url }}){: .img-fluid}
 
 You can click the 'Manager App' button. This will show you the apps running on your Tomcat server.
 
-![Tomcat Apps]({{ "assets/tomcatapp.JPG" | absolute_url }})
+![Tomcat Apps]({{ "assets/tomcatapp.JPG" | absolute_url }}){: .img-fluid}
 
 You can click the link of the SHawtio app. To get to the index.html, we added this to our link. This now shows the hawt.io start page. 
 
-![Hawtio Start]({{ "assets/hawtio.JPG" | absolute_url }})
+![Hawtio Start]({{ "assets/hawtio.JPG" | absolute_url }}){: .img-fluid}
 
 Now that we have our container running locally, we can now push it up to Azure. First, we will try and run it as a Azure Container Image. In a next blog post, we will run it in Web apps on containers.
 
