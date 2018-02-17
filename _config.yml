@@ -3,6 +3,7 @@ title: GitteTitter
 email: gitte.vermeiren@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Just me and my everyday ramblings on coding.
+author:            Gitte Vermeiren
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://vermegi.github.io" # the base hostname & protocol for your site
 twitter_username: gittetitter
@@ -13,8 +14,11 @@ markdown: kramdown
 highlighter: pygments
 permalink: pretty
 paginate: 5
+paginate_path:     "/posts/page:num/"
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
 exclude: ["node_modules"]
 
 encoding: utf-8
-
 
