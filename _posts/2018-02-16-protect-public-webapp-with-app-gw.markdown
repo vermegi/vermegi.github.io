@@ -19,17 +19,17 @@ Next, you need to get the public IP of your application gateway. You can find th
 
 Once you have this, in your web app, you can go to networking:
 
-![networking]({{ "assets/networking.JPG" | absolute_url }})
+![networking]({{ "assets/networking.JPG" | absolute_url }}){: .img-fluid}
 
 And there open the IP restrictions blade. Here you can now add a IP restriction rule for the IP of the application gateway. 
 
 Once you have this, directly going to the URL of the web app will not be possible anymore.
 
-![noaccess]({{ "assets/noaccess.JPG" | absolute_url }})
+![noaccess]({{ "assets/noaccess.JPG" | absolute_url }}){: .img-fluid}
 
 While going through the application gateway is no problem.
 
-![access]({{ "assets/access.JPG" | absolute_url }})
+![access]({{ "assets/access.JPG" | absolute_url }}){: .img-fluid}
 
 And that's all you need to protect a public web app with a application gateway and/or a WAF. (for the latter, just enable the feature on the app gateway). 
 
