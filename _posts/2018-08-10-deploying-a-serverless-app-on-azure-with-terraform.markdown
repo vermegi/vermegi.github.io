@@ -9,4 +9,4 @@ Recently I was going through our serverless cloud workshop and got the idea of r
 
 First thing you need is a VSTS project for the automation. Open up your vsts (someaccount.visualstudio.com) and click 'Create Project'. As you can see, I am already using the new VSTS layout, which I like a lot better compared to the old look and feel. 
 
-![resources]({{ "assets/createproject.JPG" | absolute_url }}){: .img-fluid}
+![resources]({{ "assets/2018-08/createproject.PNG" | absolute_url }}){: .img-fluid}
