@@ -1,16 +1,16 @@
 ---
 layout: post
-title:  "Deploying a serverless app to azure with Terraform"
-date:   2018-08-10 14:15:05
+title:  "Deploying a serverless app to azure with Terraform - Part 1"
+date:   2018-08-13 14:15:05
 categories: azure Terraform Serverless
 background: "/assets/ip-restrictions.png"
 draft: true
 ---
-Recently I was going through our serverless cloud workshop and got the idea of redoing the infrastructure setup for this with Terraform and with a fully automated build and release pipeline on VSTS. In this post I will walk you through the steps needed for setting this up.
+Recently I was going through one of our cloud workshops and got the idea of redoing the infrastructure setup for this with [Terraform][terraformstart] and with a fully automated build and release pipeline on [VSTS][vstsstart]. Terraform will let you, just like [ARM templating][armstart] will, setup your infractructure in a fully automated fashion. It will give you the same ability to write [infrastructure as code][IaC]. With the added value that Terraform can be used to not only automate Azure environments, but also those for other cloud providers. In this post I will walk you through the steps needed for setting this up. The cloud workshop I will be using as a basis for this is the one on [serverless architecture][mcwserverless]. It combines a couple of Azure services like Azure Functions, CosmosDb, Azure Event Grid, Logic Apps, ... just to name a few. I will not perform the entire setup in this blog post, but it will be enough to get you started on Terraform, Azure and VSTS. 
 
-Before we write our Terraform script, lets first download Terraform from [here][terraformdownload]. Install instructions can be found [here][terraforminstall]. Basically for windows, you unzip the download and alter your PATH variable to find the terraform.exe.
+Before we start writing our Terraform scripts, lets first download Terraform from [here][terraformdownload]. Install instructions can be found [here][terraforminstall]. Basically for windows, you unzip the download and alter your PATH variable so it can find the terraform.exe.
 
-With this being done, let's write our first Terraform file. I created a /setup directory in the project directory where I want to work in. In the /setup directory I created a setup.tf file. First thing I want to do is create a Azure Resource Manager resource group: 
+With this being done, let's write our first Terraform file. I created a /setup directory in the project directory where I want to work in. In the /setup directory I created a setup.tf file. First thing I want to do is create a Azure Resource Manager resource group. For this you need to indicate you want to use the azure provider and next indicate you want to create a resourcegroup: 
 
 {% highlight Terraform %}
 #configure the azure provider
@@ -24,6 +24,8 @@ resource "azurerm_resource_group" "mcw-serverless-architecture" {
     location = "West Europe"
 }
 {% endhighlight %}
+
+You will notice we don't give any credentials in the azurerm provider of the setup file. This is because when running locally Terraform will use the credentials of my command line. We will login to Azure in one of the next steps.
 
 Once you have this file, from the command line move to your /setup folder and issue the following command:
 
@@ -65,7 +67,7 @@ Note, we have launched a browser for you to login. For old experience with devic
 You have logged in. Now let us find all subscriptions you have access to...
 {% endhighlight %}
 
-Make sure to check whether the correct subscription is inidcated as being your default subscription. If this is not the case, you can change this with:
+Make sure to check whether the correct subscription is indicated as being your default subscription, because in the next step we will actually start creating resources. If this is not the case, you can change this with:
 
 {% highlight Console %}
 > az account set 'subscription-id or name'
@@ -105,9 +107,15 @@ azurerm_resource_group.mcw-serverless-architecture: Creation complete after 0s (
 xx-xxxxxxxxxxxx/resourceGroups/dev)
 {% endhighlight %}
 
+Terraform will perform a check of which steps it needs to execute to create the resources of your .tf files. It will also ask you for confirmation whether it can go on in creating them.
+
 With this being succesful, you can now check out the newly created resource group in the Azure portal. 
 
 ![resources]({{ "assets/2018-08/resourcegroup.PNG" | absolute_url }}){: .img-fluid}
+
+You will also notice that in the folder where you created the setup.tf file a terraform.tfstate file got added. This file will be used by Terraform to keep track of the resources it created. This means that if you now reissue the terraform apply command, nothing will really happen, because all resources were already created. 
+
+
 
 First thing you need is a VSTS project for the automation. Open up your vsts (someaccount.visualstudio.com) and click 'Create Project'. As you can see, I am already using the new VSTS layout, which I like a lot better compared to the old look and feel.
 
@@ -122,7 +130,11 @@ Once your project got created, initialize your repo with a default readme file. 
 ![resources]({{ "assets/2018-08/repoinit.PNG" | absolute_url }}){: .img-fluid}
 
 
-
+[terraformstart]: https://www.terraform.io/
+[vstsstart]: https://visualstudio.microsoft.com/team-services/
+[armstart]: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates
+[IaC]: https://docs.microsoft.com/en-us/azure/devops/what-is-infrastructure-as-code
+[mcwserverless]: https://github.com/Microsoft/MCW-Serverless-architecture 
 [terraformdownload]: https://www.terraform.io/downloads.html
 [terraforminstall]: https://www.terraform.io/intro/getting-started/install.html
 [azurecli]: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
