@@ -3,7 +3,7 @@ layout: post
 title:  "Deploying a serverless app to azure with Terraform - Part 1"
 date:   2018-08-14 14:15:05
 categories: azure Terraform Serverless
-background: "/assets/ip-restrictions.png"
+background: "/assets/2018-08/serverlessapp.PNG"
 ---
 Recently I was going through one of our cloud workshops and got the idea of redoing the infrastructure setup for this with [Terraform][terraformstart] and with a fully automated build and release pipeline on [VSTS][vstsstart]. Terraform will let you, just like [ARM templating][armstart] will, setup your infractructure in a fully automated fashion. It will give you the same ability to write [infrastructure as code][IaC]. With the added value that Terraform can be used to not only automate Azure environments, but also those for other cloud providers. Also, from this first experience, it feels less tedious than doing the infrastructure configuration in Json. 
 
