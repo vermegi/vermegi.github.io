@@ -355,6 +355,7 @@ DEPLOY
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters {
     "accountName" = "mcwtollboothvision"
+    "SKU" = "S1"
   }
 
   deployment_mode = "Incremental"
