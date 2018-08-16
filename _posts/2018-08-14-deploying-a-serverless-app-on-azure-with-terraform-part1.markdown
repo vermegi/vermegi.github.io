@@ -154,7 +154,7 @@ resource "azurerm_storage_container" "exportcontainer" {
 
 A terraform apply again does the trick. And with this, I must say, the script/config format for Terraform is really concise and contains less clutter than ARM templates do. I am already really liking this format and the quickness of using it. 
 
-For the next part, I did have to alter my config. Normally for the cloud workshop your function apps should be created in a consumption plan, but when applying the terraform template it gives a 400 Bad Request error. In Azure you can find this same error in the Activity Log of your resource group, but except for this 400 Bad Request, it is non-explanatory. I filed a [github issue][githubissue] for this problem. So instead of the following config:
+For the next part, I did have to alter my config a bit. I filed a [github issue][githubissue] for the problem I encountered (seems to have something to do with the casing of the function app name).  
 
 {% highlight Terraform %}
 resource "azurerm_storage_account" "functionsa" {
@@ -178,7 +178,7 @@ resource "azurerm_app_service_plan" "asp" {
 }
 
 resource "azurerm_function_app" "function" {
-  name                      = "mcwTollboothEventsfunc"
+  name                      = "mcw-tollboothevents-func"
   location                  = "${azurerm_resource_group.rg.location}"
   resource_group_name       = "${azurerm_resource_group.rg.name}"
   app_service_plan_id       = "${azurerm_app_service_plan.asp.id}"
@@ -186,39 +186,7 @@ resource "azurerm_function_app" "function" {
 }
 {% endhighlight %}
 
-I performed the following config:
-
-{% highlight Terraform %}
-resource "azurerm_storage_account" "functionsa" {
-  name                     = "mcwfunctionsa"
-  resource_group_name      = "${azurerm_resource_group.rg.name}"
-  location                 = "${azurerm_resource_group.rg.location}"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
-
-resource "azurerm_app_service_plan" "asp" {
-  name                = "azure-functions-mcw-service-plan"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  #kind                = "FunctionApp"
-
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
-}
-
-resource "azurerm_function_app" "function" {
-  name                      = "mcwTollboothEventsfunc"
-  location                  = "${azurerm_resource_group.rg.location}"
-  resource_group_name       = "${azurerm_resource_group.rg.name}"
-  app_service_plan_id       = "${azurerm_app_service_plan.asp.id}"
-  storage_connection_string = "${azurerm_storage_account.functionsa.primary_connection_string}"
-}
-{% endhighlight %}
-
-So, small change to the app service plan to go from consumption to Standard S1. With the same config I also created a second Azure Function and named it mcwTollboothfunc. I did reuse the same storage account and app service plan for this function. If afterwards it turns out this is a bad choice, I can easily change that in the config. 
+I did reuse the same storage account and app service plan for the second function. If afterwards it turns out this is a bad choice, I can easily change that in the config. 
 
 Next up: the Event Grid topic. 
 
