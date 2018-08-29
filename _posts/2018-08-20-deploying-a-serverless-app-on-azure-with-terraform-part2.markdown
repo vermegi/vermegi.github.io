@@ -3,7 +3,7 @@ layout: post
 title:  "Deploying a serverless app to azure with Terraform - Part 2"
 date:   2018-08-20 14:15:05
 categories: azure Terraform Serverless
-background: "/assets/2018-08/release4.png"
+background: "/assets/2018-08/release4.PNG"
 ---
 
 In the previous post we build a [Terraform][terraformstart] template for deploying multiple resources to Azure. In this second part I will automate the deployment with a VSTS build and release pipeline. And we'll do it in such a way that we'll use a serverless build agent, one which we spin up just before we need it, and spin down again once we're done. 

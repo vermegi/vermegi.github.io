@@ -3,7 +3,7 @@ layout: post
 title:  "Deploying a serverless app to azure with Terraform - Part 3"
 date:   2018-08-29 14:15:05
 categories: azure Terraform Serverless
-background: "/assets/2018-08/release4.png"
+background: "/assets/2018-08/dev.png"
 ---
 
 In the previous posts we build a [Terraform][terraformstart] template for deploying multiple resources to Azure and we created a build agent in a container which we can run on the fly. In this third part I will further automate the deployment by adding the release tasks for creating the solution architecture in Azure with Terraform.
@@ -18,7 +18,7 @@ What we need for this is first a task which can run our Terraform tasks. For thi
 echo "************ Initialize provider"
 terraform init
 
-echo "************ Run apply"
+echo "************ Run apply
 terraform apply -auto-approve 
 {% endhighlight %}
 
