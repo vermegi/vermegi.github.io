@@ -3,7 +3,7 @@ layout: post
 title:  "Deploying a serverless app to azure with Terraform - addendum"
 date:   2018-08-29 14:15:05
 categories: azure Terraform Serverless
-background: "/assets/2018-08/release4.PNG"
+background: "/assets/2018-08/dev.PNG"
 ---
 
 In the previous 3 posts we build a [Terraform][terraformstart] template for deploying multiple resources to Azure and we created a build agent in a container which we can run on the fly and we fully automated the deployment through VSTS. In this small addendum, I just want to add a little side note of an alteration I made to the process of the docker build agent. 
