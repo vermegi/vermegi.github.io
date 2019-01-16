@@ -10,7 +10,7 @@ In a previous post I walked you through how to get [apache superset][superset] u
 In this post I will walk you through getting the superset container up in Azure App Service for linux. I will explain to you the following steps:
 
 * create an Azure App Service for Linux based on a docker-compose file
-* map storage to you app service and use it in your container
+* map storage to you app service and use it in your container. This is a new [feature][feature] for app service
  
 First, we will need to create an app service plan, and a webapp. 
 
@@ -99,3 +99,4 @@ And that should get it all up and running.
 [supersetgit]: https://github.com/amancevice/superset 
 [dockerwindows]: https://docs.docker.com/docker-for-windows/ 
 [postgresexample]: https://github.com/amancevice/superset/tree/master/examples 
+[feature]: https://blogs.msdn.microsoft.com/appserviceteam/2018/09/24/announcing-bring-your-own-storage-to-app-service/
