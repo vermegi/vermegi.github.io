@@ -6,64 +6,91 @@ categories: azure AppService docker storage
 background: "/assets/2018-08/dev.PNG"
 ---
 
-Recently I got the question from a customer to help him run [Apache superset][superset] on Azure. Apache superset is an open source projects which allows you to create and run PowerBI dashboards on top of different data sources. It is build in Python and according to the installation documentation you can run this in a docker container to get quickly started. So, my plan was to get this docker container up and running on Azure App Service, since it needs a web endpoint. Also, along the way, I needed to map storage for this container. This post will guide you through my efforts and setup.
+In a previous post I walked you through how to get [apache superset][superset] up and running together with Azure Database for PostgreSQL and Azure Redis Cache. 
+In this post I will walk you through getting the superset container up in Azure App Service for linux. I will explain to you the following steps:
 
-First, to make a long story short on how much time I lost on getting the official docker container build based on the [superset documentation][supersetdocs] and [official superset git repo][supersetrepo]: After 2 days of sweating and swearing, I switched to [this prebuild docker image][supersetdocker] on dockerhub. Based on this image and accompanying [github repo with examples][supersetgit], I was able to at least build and run superset locally with docker. For this I used [docker for windows][dockerwindows], set it to use Linux containers and walked through the [superset postgres example][postgresexample]. 
-
-So, once I had this example running locally, I wanted to get this up and running in Azure. First thing I did for this, was create an Azure Database for PostgreSQL:
+* create an Azure App Service for Linux based on a docker-compose file
+* map storage to you app service and use it in your container
+ 
+First, we will need to create an app service plan, and a webapp. 
 
 {% highlight cli %}
-#login to Azure
-az login
+#create appservice plan
+az appservice plan create --name supersetplan --resource-group superset_tryout --sku S1 --is-linux
 
-#if needed select the correct subscription
-
-#create a resource group for your setup
-az group create --name superset_tryout --location "West Europe"
-
-#create the PostgreSQL server
-az postgres server create --resource-group superset_tryout --name supersettryout --location "West Europe" --admin-user admin --admin-password yadadadatralala --sku-name B_Gen4_1
-
-#create a firewall rule for the database (a very relaxed rule for this demo, but feel free to make it much more restrictive)
-az postgres server firewall-rule create --resource-group superset_tryout --server-name supersettryout --start-ip-address=0.0.0.0 --end-ip-address=0.0.0.0 --name AllowAllAzureIPs
-az postgres server firewall-rule create --resource-group superset_tryout --server-name supersettryout --start-ip-address=<your_ip_address> --end-ip-address=<your_ip_address> --name AllowLocalClient
+#create webapp
+az webapp create --resource-group superset_tryout --plan supersetplan --name supersettryout --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 {% endhighlight %}
 
-Once you created the posgreSQL server, you can create a database for superset:
+This second line will create a web app in Azure based on your docker-compose file. The docker-compose file looks like this:
 
-{% highlight cli %}
-psql -h supersettryout.postgres.database.azure.com -U admin@supersettryout postgres
-
-CREATE DATABASE superset;
-{% endhighlight %}
-
-Once you created this database, you can remove the postgres service from the docker-compose file of the superset examples. The file now looks like this:
-
-{% highlight cli %}
+{% highlight docker %}
 version: '3'
 services:
-  redis:
-    image: redis
-    restart: always
-    volumes:
-      - redis:/data
   superset:
-    image: amancevice/superset
+    image: gittetitter/superset:1
     restart: always
-    depends_on:
-      - redis
     environment:
       MAPBOX_API_KEY: ${MAPBOX_API_KEY}
     ports:
       - "8088:8088"
     volumes:
       - ./superset_config.py:/etc/superset/superset_config.py
-volumes:
-  postgres:
-    external: false
-  redis:
-    external: false
 {% endhighlight %}
+
+(As you can notice in the docker-compose file I switched to my own docker container, that I published to docker hub. The only change I made here was an updated version of the werkzeug library. I switched this to version 0.14. I needed this update somewhere along the way, but I can't remember what the error was I was trying to fix.)
+
+This setup works, more or less, however, notice the volume mapping which is in there. This will not work in app service, since the superset_config.py file is not there. So the superset service will have no config to start from. To fix this, we can map a storage container to our app service. 
+
+{% highlight cli %}
+#create storage account
+az storage account create --name supersettryout --resource-group superset_tryout
+
+#create storage container
+az storage container create --name superset --account-name supersettryout
+
+#upload superset_config.py
+az storage blob upload-batch -d superset --account-name supersettryout --account-key "yadayadathekey" -s F:\dev\github\superset\examples\gitte_postgres --pattern *.py
+{% endhighlight %}
+
+Now that we have a storage container with our superset_config.py file, we can associate this container to our app service. 
+
+{% highlight cli %}
+#attach storage account to webapp
+az webapp config storage-account add --resource-group superset_tryout --name supersettryout --custom-id CustomId --storage-type AzureBlob --share-name superset --account-name supersettryout --access-key "yadadadathekey" --mount-path /etc/superset
+{% endhighlight %}
+
+The tricky parts of this command are:
+
+* --share-name: which can also be a storage container name, so here use the name of your storage container you just create
+* --mount-path: use the same as the path where you want it to end up in your container
+* --custom-id: you will later use this id in your docker-compose file
+
+Now you can alter your docker-compose file to use this storage:
+
+{% highlight docker %}
+version: '3'
+services:
+  superset:
+    image: gittetitter/superset:1
+    restart: always
+    environment:
+      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+    ports:
+      - "80:8088"
+    volumes:
+      - CustomId:/etc/superset
+{% endhighlight %}
+
+So in the volumes parameter, you use the --custom-id and the --mount-path again. 
+
+Last step is update your web app:
+
+{% highlight cli %}
+az webapp config container set --resource-group superset_tryout --name supersettryout --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+{% endhighlight %}
+
+And that should get it all up and running. 
 
 [superset]: https://superset.incubator.apache.org/
 [supersetdocs]: https://superset.incubator.apache.org/installation.html#start-with-docker

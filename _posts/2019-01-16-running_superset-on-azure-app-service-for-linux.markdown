@@ -124,14 +124,14 @@ Once you have your cache setup, you can also alter the docker-compose file and g
 version: '3'
 services:
   superset:
-    image: gittetitter/superset:1
+    image: amancevice/superset
     restart: always
     environment:
       MAPBOX_API_KEY: ${MAPBOX_API_KEY}
     ports:
-      - "80:8088"
+      - "8088:8088"
     volumes:
-      - CustomId:/etc/superset
+      - ./superset_config.py:/etc/superset/superset_config.py
 {% endhighlight %}
 
 And again, in the superset_config.py file alter the connection information. Now, this is quite tricky, since Azure Redis Cache only allows connections over SSL. For this you need special syntax. 
