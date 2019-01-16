@@ -3,7 +3,7 @@ layout: post
 title:  "Running superset on Azure App Service for Linux"
 date:   2019-01-16 14:15:05
 categories: azure AppService docker storage
-background: "/assets/2018-08/dev.PNG"
+background: "/assets/2018-08/superset.PNG"
 ---
 
 Recently I got the question from a customer to help him run [Apache superset][superset] on Azure. Apache superset is an open source projects which allows you to create and run PowerBI dashboards on top of different data sources. It is build in Python and according to the installation documentation you can run this in a docker container to get quickly started. So, my plan was to get this docker container up and running on Azure App Service, since it needs a web endpoint. 

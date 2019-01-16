@@ -3,7 +3,7 @@ layout: post
 title:  "Using Cloud Storage for Docker in Azure App Service for Linux"
 date:   2019-01-16 14:15:05
 categories: azure AppService docker storage
-background: "/assets/2018-08/dev.PNG"
+background: "/assets/2018-08/superset.PNG"
 ---
 
 In a previous post I walked you through how to get [apache superset][superset] up and running together with Azure Database for PostgreSQL and Azure Redis Cache. 
