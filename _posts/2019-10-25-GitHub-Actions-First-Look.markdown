@@ -219,6 +219,8 @@ Also interface-wise, getting an overview of all your runs, ie. navigating back f
 
 Already nice work from the team! Happy to see this evolve in more!
 
+Also, as an addendum. Once you add GitHub actions to your Github account, you get different proposals of workflows that would make sense to your repository. I clicked open the actions menu for this blog (which lives on GitHub pages and is compiled through Jekyll) and first recomendation for an action workflow was Jekyll docker build. Nice!!!
+
 
 [ghactionssignup]: https://github.com/features/actions
 [func]: https://github.com/Azure/azure-functions-core-tools
