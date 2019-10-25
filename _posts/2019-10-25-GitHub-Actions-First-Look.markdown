@@ -220,9 +220,9 @@ Also interface-wise, getting an overview of all your runs, ie. navigating back f
 Already nice work from the team! Happy to see this evolve in more!
 
 
-[ghactionssignup] https://github.com/features/actions
-[func] https://github.com/Azure/azure-functions-core-tools
-[vermegiGH] https://github.com/vermegi/GHActionsDemo
-[GHActions] https://github.com/marketplace?type=actions
+[ghactionssignup]: https://github.com/features/actions
+[func]: https://github.com/Azure/azure-functions-core-tools
+[vermegiGH]: https://github.com/vermegi/GHActionsDemo
+[GHActions]: https://github.com/marketplace?type=actions
 [functionappwf]: https://raw.githubusercontent.com/Azure/actions-workflow-samples/master/windows-node.js-functionapp-on-azure.yml
-[usage] https://help.github.com/en/github/automating-your-workflow-with-github-actions/about-github-actions#usage-limits
+[usage]: https://help.github.com/en/github/automating-your-workflow-with-github-actions/about-github-actions#usage-limits
